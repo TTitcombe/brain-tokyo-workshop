@@ -1,6 +1,7 @@
 import random
 import numpy as np
 import sys
+from gym.wrappers import Monitor
 from domain.make_env import make_env
 from neat_src import *
 
@@ -8,7 +9,7 @@ from neat_src import *
 class GymTask():
   """Problem domain to be solved by neural network. Uses OpenAI Gym patterns.
   """ 
-  def __init__(self, game, paramOnly=False, nReps=1): 
+  def __init__(self, game, paramOnly=False, nReps=1, record=False): 
     """Initializes task environment
   
     Args:
@@ -31,7 +32,11 @@ class GymTask():
     self.maxEpisodeLength = game.max_episode_length
     self.actSelect = game.actionSelect
     if not paramOnly:
-      self.env = make_env(game.env_name)
+      if record:
+        env_to_wrap = make_env(game.env_name)
+        self.env = Monitor(env_to_wrap, "trial_recording/", force=True)
+      else:
+        self.env = make_env(game.env_name)
     
     # Special needs...
     self.needsClosed = (game.env_name.startswith("CartPoleSwingUp"))    

@@ -27,7 +27,7 @@ def main(argv):
   # Load task and parameters
   hyp = loadHyp(pFileName=hyp_default)
   updateHyp(hyp,hyp_adjust)
-  task = WannGymTask(games[hyp['task']], nReps=hyp['alg_nReps'])
+  task = WannGymTask(games[hyp['task']], nReps=hyp['alg_nReps'], record=args.record)
 
   # Bullet needs some extra help getting started
   if hyp['task'].startswith("bullet"):
@@ -81,6 +81,9 @@ if __name__ == "__main__":
 
   parser.add_argument('-s', '--seed', type=int,\
    help='random seed', default=-1)
+
+  parser.add_argument('-r', '--record', type=str2bool,\
+   help='record trial?', default=False)
 
   args = parser.parse_args()
   main(args)                             

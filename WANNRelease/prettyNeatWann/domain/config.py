@@ -114,6 +114,24 @@ cartpole_swingup = cartpole_swingup._replace(\
     env_name='CartPoleSwingUp', max_episode_length=1000)
 games['swingup'] = cartpole_swingup
 
+# -- LunarLander --------------------------------------------------------- -- #
+lunar = Game(env_name="LunarLanderContinuous-v2",
+	     actionSelect='all',
+	     input_size=8,
+   	     output_size=2,
+	     time_factor=0,
+	     layers=[5, 5],
+	     i_act=np.full(8, 1),
+	     h_act=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+	     o_act=np.full(2,1),
+	     weightCap = 2.0,
+  	     noise_bias=0.0,
+  	     output_noise=[False, False, False],
+  	     max_episode_length = 200,
+  	     in_out_labels = ['1', '2', '3', '4', '5', '6', '7', '8',
+                   'main_engine', 'left_right_engine']
+)
+games['lunar'] = lunar
 
 # -- Bipedal Walker ------------------------------------------------------ -- #
 
