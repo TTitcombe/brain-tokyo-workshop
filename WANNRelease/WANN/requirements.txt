@@ -1,0 +1,4 @@
+numpy>=1.15.2
+mpi4py>=3.0.1
+gym=0.9.6
+tqdm

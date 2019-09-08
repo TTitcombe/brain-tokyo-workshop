@@ -1,4 +1,6 @@
+from gym.wrappers import Monitor
 import numpy as np
+import os
 import time
 import sys
 import random
@@ -10,7 +12,7 @@ from .ind import *
 class Task():
   """Problem domain to be solved by neural network. Uses OpenAI Gym patterns.
   """ 
-  def __init__(self, game, paramOnly=False, nReps=1): 
+  def __init__(self, game, paramOnly=False, nReps=1, record_path="./test_videos"): 
     """Initializes task environment
   
     Args:
@@ -34,6 +36,9 @@ class Task():
 
     if not paramOnly:
       self.env = make_env(game.env_name)
+      if record_path:
+        self.env_to_wrap = self.env
+        self.env = Monitor(self.env_to_wrap, record_path, force=True)
 
     # Special needs...
     self.needsClosed = (game.env_name.startswith("CartPoleSwingUp"))    
@@ -79,7 +84,7 @@ class Task():
       if view:
         #time.sleep(0.01)
         if self.needsClosed:
-          self.env.render(close=done)  
+          self.env.render(close=done)
         else:
           self.env.render()
       if done:
@@ -147,6 +152,8 @@ class Task():
     reward = np.empty((nRep,nVals))
     for iRep in range(nRep):
       for iVal in range(nVals):
+        monitor_name = "./cartpole_{}".format(iVal)
+        self.env = Monitor(self.env_to_wrap, monitor_name)
         wMat = self.setWeights(wVec,wVals[iVal])
         if seed == -1:
           reward[iRep,iVal] = self.testInd(wMat, aVec, seed=seed,view=view)
